@@ -1,6 +1,13 @@
 package org.example.parser;
 import jakarta.json.*;
 import org.example.Main;
+import org.example.modelo.Direccion;
+import org.example.modelo.Empleado;
+import org.example.modelo.Telefono;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ParserJSON {
     JsonReader reader = Json.createReader(Main.class.getResourceAsStream("/nuevo.json"));
@@ -10,14 +17,68 @@ public class ParserJSON {
         structure = reader.read();
     }
 
+    public List<Empleado> obtenerEmpleados() {
+        List<Empleado> empleados = new ArrayList<>();
+        JsonValue valores = structure.getValue("");
+        JsonObject datos = valores.asJsonObject();
+        datos = (JsonObject) datos.get("datos");
+        //System.out.println(valores.toString());
+        Empleado emp =  new Empleado();
+        emp.setNombre(datos.getString("firstName"));
+        emp.setApellido(datos.getString("lastName"));
+        emp.getEdad(datos.getInt("age"));
+        empleados.add(emp);
+        emp.setDir(obtenerDir(datos.getJsonObject("address")));
+        emp.setTelefonos(obtenerTelefonos(datos.getJsonArray("phoneNumbers")));
+        return empleados;
+    }
+
+    private Direccion obtenerDir(JsonObject direccion){
+        Direccion dire = new Direccion();
+        dire.setCalle(direccion.getString("streetAddress"));
+        dire.setCiudad(direccion.getString("city"));
+        dire.setEstado(direccion.getString("state"));
+        dire.setCp(direccion.getInt("postalCode"));
+        return dire;
+    }
+
+    private List<Telefono> obtenerTelefonos(JsonArray telefonos) {
+        List<Telefono> telefonoList = new ArrayList<>();
+        Telefono telefono = new Telefono();
+        //System.out.println(telefonos.size());
+        for (int i = 0; i < telefonos.size(); i++) {
+            JsonObject jsonTelefono = telefonos.getJsonObject(i);
+            telefono.setTipo(jsonTelefono.getString("type"));
+            telefono.setNumero(jsonTelefono.getString("number"));
+            telefonoList.add(telefono);
+        }
+        return telefonoList;
+    }
+
     public void contenido() {
         JsonValue valores = structure.getValue("");
-        if (valores.getValueType() == JsonValue.ValueType.OBJECT) {
-            JsonObject objeto = (JsonObject) valores;
-            for(String e :  objeto.keySet()) {
-                JsonObject valore = (JsonObject) objeto.getValue("/" + e);
-                for(String v : valore.keySet()) {
-                    System.out.println(v);
+        JsonObject objeto = (JsonObject) valores;
+        for(String e :  objeto.keySet()) {
+            JsonObject valore = (JsonObject) objeto.getValue("/" + e);
+            for(String v : valore.keySet()) {
+                System.out.println(v + ":");
+                if (valore.get(v).getValueType() == JsonValue.ValueType.ARRAY) {
+                    JsonArray array = (JsonArray) valore.getJsonArray(v);
+                    for(JsonValue j : array){
+                        JsonObject obj = (JsonObject) j;
+                        for (String k : obj.keySet()) {
+                            System.out.println(k + ": " );
+                            System.out.println(obj.get(k));
+                        }
+                    }
+                }else if (valore.get(v).getValueType() == JsonValue.ValueType.OBJECT) {
+                    JsonObject objeto1 = (JsonObject) valore.get(v);
+                    for(String e1 : objeto1.keySet()) {
+                        System.out.println(e1 + ":");
+                        System.out.println(objeto1.get(e1));
+                    }
+                } else {
+                    System.out.println(valore.get(v));
                 }
             }
         }
