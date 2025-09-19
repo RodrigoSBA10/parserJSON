@@ -56,21 +56,19 @@ public class ParserJSON {
 
     public void agrgearEmpleado(Empleado empleado) {
         JsonObjectBuilder objeto = Json.createObjectBuilder();
-        objeto.add("FirstName", empleado.getNombre());
-        objeto.add("LastName", empleado.getApellido());
-        objeto.add("Age", empleado.getEdad());
-        JsonObject obj = objeto.build();
-        JsonPointer p = Json.createPointer("/datos1");
+        JsonPointer pointer;
+        JsonObject nuevo = objeto.add("FirstName", empleado.getNombre())
+                            .add("LastName", empleado.getApellido())
+                            .add("Age", empleado.getEdad()).build();
 
-        structure = p.add(structure, obj);
-        JsonObjectBuilder address = Json.createObjectBuilder();
-        address.add("streetAddress", empleado.getDir().getCalle());
-        address.add("city", empleado.getDir().getCiudad());
-        address.add("state", empleado.getDir().getEstado());
-        address.add("postalCode", empleado.getDir().getCp());
-        JsonObject addres = address.build();
-        p=Json.createPointer("/address1");
-        structure = p.add(structure, addres);
+        JsonObject nuevoDIr = objeto.add("streetAddress", empleado.getDir().getCalle())
+                                .add("city", empleado.getDir().getCiudad())
+                                .add("state", empleado.getDir().getEstado())
+                                .add("postalCode", empleado.getDir().getCp()).build();
+        pointer=Json.createPointer("/address1");
+        nuevo = pointer.add(nuevo, nuevoDIr);
+        pointer = Json.createPointer("/datos1");
+        structure = pointer.add(structure, nuevo);
     }
 
     public void contenido() {
