@@ -36,7 +36,7 @@ public class Empleado {
         this.apellido = apellido;
     }
 
-    public int getEdad(int age) {
+    public int getEdad() {
         return edad;
     }
 
@@ -62,12 +62,9 @@ public class Empleado {
 
     @Override
     public String toString() {
-        return "Empleado{" +
-                "nombre='" + nombre + '\'' +
-                ", apellido='" + apellido + '\'' +
-                ", edad=" + edad +
-                ", dir=" + dir +
-                ", telefonos=" + telefonos +
-                '}';
+        return "Empleado" +
+                "\nnombre='" + nombre + '\'' +
+                "\napellido='" + apellido + '\'' +
+                "\nedad=" + edad + dir + telefonos;
     }
 }

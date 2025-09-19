@@ -4,8 +4,6 @@ import org.example.Main;
 import org.example.modelo.Direccion;
 import org.example.modelo.Empleado;
 import org.example.modelo.Telefono;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,14 +17,15 @@ public class ParserJSON {
 
     public List<Empleado> obtenerEmpleados() {
         List<Empleado> empleados = new ArrayList<>();
-        JsonValue valores = structure.getValue("");
+        JsonValue valores = structure.getValue("/");
         JsonObject datos = valores.asJsonObject();
+
         datos = (JsonObject) datos.get("datos");
         //System.out.println(valores.toString());
         Empleado emp =  new Empleado();
         emp.setNombre(datos.getString("firstName"));
         emp.setApellido(datos.getString("lastName"));
-        emp.getEdad(datos.getInt("age"));
+        emp.setEdad(datos.getInt("age"));
         empleados.add(emp);
         emp.setDir(obtenerDir(datos.getJsonObject("address")));
         emp.setTelefonos(obtenerTelefonos(datos.getJsonArray("phoneNumbers")));
@@ -55,10 +54,30 @@ public class ParserJSON {
         return telefonoList;
     }
 
+    public void agrgearEmpleado(Empleado empleado) {
+        JsonObjectBuilder objeto = Json.createObjectBuilder();
+        objeto.add("FirstName", empleado.getNombre());
+        objeto.add("LastName", empleado.getApellido());
+        objeto.add("Age", empleado.getEdad());
+        JsonObject obj = objeto.build();
+        JsonPointer p = Json.createPointer("/datos1");
+
+        structure = p.add(structure, obj);
+        JsonObjectBuilder address = Json.createObjectBuilder();
+        address.add("streetAddress", empleado.getDir().getCalle());
+        address.add("city", empleado.getDir().getCiudad());
+        address.add("state", empleado.getDir().getEstado());
+        address.add("postalCode", empleado.getDir().getCp());
+        JsonObject addres = address.build();
+        p=Json.createPointer("/address1");
+        structure = p.add(structure, addres);
+    }
+
     public void contenido() {
         JsonValue valores = structure.getValue("");
         JsonObject objeto = (JsonObject) valores;
         for(String e :  objeto.keySet()) {
+
             JsonObject valore = (JsonObject) objeto.getValue("/" + e);
             for(String v : valore.keySet()) {
                 System.out.println(v + ":");

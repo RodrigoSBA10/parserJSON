@@ -50,11 +50,10 @@ public class Direccion {
 
     @Override
     public String toString() {
-        return "Direccion{" +
-                "calle='" + calle + '\'' +
-                ", ciudad='" + ciudad + '\'' +
-                ", estado='" + estado + '\'' +
-                ", cp=" + cp +
-                '}';
+        return "\nDireccion:" +
+                "\ncalle='" + calle + '\'' +
+                "\nciudad='" + ciudad + '\'' +
+                "\nestado='" + estado + '\'' +
+                "\ncp=" + cp;
     }
 }
