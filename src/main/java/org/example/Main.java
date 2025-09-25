@@ -26,11 +26,12 @@ public class Main {
         Telefono tel2 = new Telefono("Local", "5522911847");
         List<Telefono> telefonos = Arrays.asList(tel1, tel2);
         em.setTelefonos(telefonos);
-        parser.agregarEmpleado(em);
-        //parser.agregarEmp(em);
+        //parser.agregarEmpleado(em);
+        parser.agregarEmp(em);
         parser.contenido();
         System.out.println("----------------------------eliminar-----------------");
         parser.borrarEmpleado();
         parser.contenido();
+        //System.out.println(parser.obtenerEmpleados());
     }
 }

@@ -82,10 +82,33 @@ public class ParserJSON {
         structure = pointer.add(structure, nuevo);
     }
 
+    public void agregarEmp(Empleado em){
+        JsonObjectBuilder datos =  Json.createObjectBuilder()
+                .add("FirstName", em.getNombre())
+                .add("LastName", em.getApellido())
+                .add("Age", em.getEdad());
+        JsonObjectBuilder dir = Json.createObjectBuilder()
+                .add("streetAddress", em.getDir().getCalle())
+                .add("city", em.getDir().getCiudad())
+                .add("state", em.getDir().getEstado())
+                .add("postalCode", em.getDir().getCp());
+        JsonArrayBuilder array = Json.createArrayBuilder();
+        for (Telefono telefono : em.getTelefonos()) {
+            JsonObjectBuilder tel = Json.createObjectBuilder()
+                    .add("type", telefono.getTipo())
+                    .add("number", telefono.getNumero());
+            array.add(tel);
+        }
+        JsonObject empleado = datos
+                .add("address", dir)
+                .add("phoneNumbers", array).build();
+        JsonPointer pointer = Json.createPointer("/datos1");
+        structure = pointer.add(structure, empleado);
+    }
 
     public  void  borrarEmpleado(){
-        JsonPointer pointer = Json.createPointer("//datos1");
-
+        JsonPointer pointer = Json.createPointer("/datos1");
+        structure = pointer.remove(structure);
     }
 
     public void contenido() {
