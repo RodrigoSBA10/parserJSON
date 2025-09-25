@@ -32,6 +32,5 @@ public class Main {
         System.out.println("----------------------------eliminar-----------------");
         parser.borrarEmpleado();
         parser.contenido();
-        //System.out.println(parser.obtenerEmpleados());
     }
 }
