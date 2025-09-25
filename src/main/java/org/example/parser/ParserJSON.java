@@ -54,7 +54,7 @@ public class ParserJSON {
         return telefonoList;
     }
 
-    public void agrgearEmpleado(Empleado empleado) {
+    public void agregarEmpleado(Empleado empleado) {
         JsonObjectBuilder objeto = Json.createObjectBuilder();
         JsonPointer pointer;
         JsonObject nuevo = objeto.add("FirstName", empleado.getNombre())
@@ -65,17 +65,34 @@ public class ParserJSON {
                                 .add("city", empleado.getDir().getCiudad())
                                 .add("state", empleado.getDir().getEstado())
                                 .add("postalCode", empleado.getDir().getCp()).build();
-        pointer=Json.createPointer("/address1");
+        pointer=Json.createPointer("/datos1");
+        JsonArrayBuilder array = Json.createArrayBuilder();
+        for (Telefono telefono : empleado.getTelefonos()) {
+            JsonObject tel = objeto.add("type", telefono.getTipo())
+                    .add("number", telefono.getNumero()).build();
+
+            array.add(tel);
+        }
+
         nuevo = pointer.add(nuevo, nuevoDIr);
-        pointer = Json.createPointer("/datos1");
         structure = pointer.add(structure, nuevo);
+        pointer = Json.createPointer("/phoneNumbers");
+        nuevo = pointer.add(nuevo, array.build());
+        //pointer = Json.createPointer("/datos1");
+        structure = pointer.add(structure, nuevo);
+    }
+
+
+    public  void  borrarEmpleado(){
+        JsonPointer pointer = Json.createPointer("//datos1");
+
     }
 
     public void contenido() {
         JsonValue valores = structure.getValue("");
         JsonObject objeto = (JsonObject) valores;
         for(String e :  objeto.keySet()) {
-
+            System.out.println(e);
             JsonObject valore = (JsonObject) objeto.getValue("/" + e);
             for(String v : valore.keySet()) {
                 System.out.println(v + ":");
@@ -100,8 +117,4 @@ public class ParserJSON {
             }
         }
     }
-
-
-
-
 }
