@@ -1,5 +1,5 @@
 {
-  "datos":{
+  "persona #1":{
     "firstName": "John",
     "lastName": "Smith",
     "age": 25,
@@ -17,6 +17,27 @@
       {
         "type": "fax",
         "number": "646 555-4567"
+      }
+    ]
+  },
+  "persona #2": {
+    "firstName": "Rodrigo",
+    "lastName": "Salvador",
+    "age": 26,
+    "address": {
+      "streetAddress": "126 Paraje San juan",
+      "city": "CDMX",
+      "state": "Iztapala",
+      "postalCode": 19830
+    },
+    "phoneNumbers": [
+      {
+        "type": "cas",
+        "number": "5522911847"
+      },
+      {
+        "type": "cel",
+        "number": "5510960686"
       }
     ]
   }
