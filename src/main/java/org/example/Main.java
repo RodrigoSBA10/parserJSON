@@ -44,6 +44,7 @@ public class Main {
         }while (opcion != 4);
         scanner.close();
         System.out.println("Hasta luego");
+        parser.hacerRespaldo();
     }
 
     static void agregarEmp() {
